@@ -16,7 +16,7 @@ u = 0;
 x0 = 1;
 
 % Stepwidth
-h = 1000e-3;
+h = 2000e-3;
 t_end = 10;
 
 %% Calculate and plot analitic solution -----------------------------------

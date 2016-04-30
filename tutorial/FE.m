@@ -1,4 +1,4 @@
-function [x,t_vec] = FE(A, b, c, d, u, h, t_end, x0 )
+function [y,t_vec] = FE(A, b, c, d, u, h, t_end, x0 )
 %FORWARDEULER returns time vector (for plotting) and state variable based
 %on the forward euler
 %   Detailed explanation goes here
@@ -7,6 +7,7 @@ function [x,t_vec] = FE(A, b, c, d, u, h, t_end, x0 )
 i = 1;
 x = zeros(size(0:h:t_end));
 x(i) = x0;
+y(i) = c'*x(i)+d*u
 
 %Calculation of the forward euler like:02_BasicsAndEulerSolver.pdf:slide 32
 for t = 0:h:t_end
@@ -15,6 +16,7 @@ for t = 0:h:t_end
     x(i+1) = x(i) + dx_dt(i)*h;
     % for plotting
     t_vec(i) = t;
+    y(i+1) = c'*x(i+1)+d*u;
     i = i+1;
 end
 
