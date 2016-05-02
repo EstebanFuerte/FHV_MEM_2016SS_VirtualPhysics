@@ -36,11 +36,23 @@ d=0;
 sys = ss(A,b,c,d);
 eig(A)
 t = 0:1e-3:1;
-u = 30*ones(size(0:1e-3:1));
-y=lsim(sys,u,t);
+u1 = u*ones(size(0:1e-3:1));
+y=lsim(sys,u1,t);
 figure
 plot(t,y); hold on;
 
-h = 1e-3;
+h = 10e-3;
+
 [yFE, t_vect] = FE(A,b,c,d,u,h,1,0);
+[yBE, t_vec] = BE(A,b,c,d,u,h,1,0);
+[yAB3, t_vec] = AB3(A,b,c,d,u,h,1,0);
+[yRK4, t_vec] = RK4(A,b,c,d,u,h,1,0);
+[yBDF3, t_vec] = BDF3(A,b,c,d,u,h,1,0);
+
 plot(t_vect,yFE)
+plot(t_vec,yBE)
+plot(t_vec,yAB3)
+plot(t_vec,yRK4)
+plot(t_vec,yBDF3)
+
+legend('lsim','FE','BE','AB3','RK4','BDF3');
