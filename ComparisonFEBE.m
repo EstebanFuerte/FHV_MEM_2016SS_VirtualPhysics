@@ -12,9 +12,23 @@ c = 1;
 % Initial Conditions
 x0 = 1;
 
-h = 2000e-3;
+h = 1e-3;
+t_end = 10;
 
-%-- Calculation and Plot of forward euler ---------------------------------
+%% -- Calcualtion of analyitc solution ------------------------------------
+i = 1;
+yAn = zeros(size(0:h:t_end));
+yAn(1) = x0;
+for t = 0:h:t_end
+    yAn(i) = x0*exp(A*t);
+    t_vec = t;
+    i = i+1;
+end
+figure
+plot(t_vec,yAn,'-r');
+
+
+%% -- Calculation and Plot of forward euler -------------------------------
 [t_vec,x] = forwardEuler(A,x0,0,10,h);
 
 figure
@@ -25,20 +39,8 @@ plot(t_vec,x(:,1:length(x)-1)); hold on;
 plot(t_vec,x(:,1:length(x)-1),'-b');
 
 % Plot original function (stepsize fixed to 1e-3) -------------------------
-i = 1;
-x = zeros(size(0:1e-3:10));
-x(i) = x0;
-for t = 0:1e-3:10
-    %FE
-    dx_dt(i) = A*x(i);
-    x(i+1) = x(i) + dx_dt(i)*1e-3;
-    
-    
-    % for plotting
-    t_vec(i) = t;
-    i = i+1;
-end
-plot(t_vec,x(:,1:length(x)-1),'-r');
-legend('forward euler','backward euler','original');
+
+plot(t_vec,yAN(:,1:length(x)-1),'-r');
+legend('forward euler','backward euler','analytic');
 
 
