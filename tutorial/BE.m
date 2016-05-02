@@ -2,26 +2,23 @@ function [ y, t_vec] = BE(A,b,c,d,u,h,t_end,x0 )
 %BACKWARDEULER Summary of this function goes here
 %   Detailed explanation goes here
 
-i = 1;
-x = [zeros(size(0:h:t_end));zeros(size(0:h:t_end))];
-u = u*ones(size(0:h:t_end));
-x(:,i) = x0;
-y(i) = c*x(:,i)+d*u(:,i);
+aSv = length(A);                  	% amount of state vatiables
+vectorLength = length(0:h:t_end);	% length of vecotr
+i = 1;                              % counting variable
+
+x = zeros(aSv,vectorLength);        % fill a vector with zeros
+x(:,i) = x0;                        % replace first element of x vector
+
+y = zeros(size(c,1),vectorLength);  % fill a matix with zeros
 
 %Calculation of the forward euler like:02_BasicsAndEulerSolver.pdf:slide 39
 for t = 0:h:t_end
-    % BE
-    x(:,i+1) = inv(1-A*h)* (x(:,i) +b*u(:,i)*h);
+    x(:,i +1) = inv(eye(length(A))-A*h) * (x(:,i)+ b*u*h);
     % for Plotting
     t_vec(i) = t;
-    
-    
-    y(i+1) = c*x(:,i+1)+d*u(:,i);
+    y(:,i) = c*x(:,i)+d*u;
     i = i+1;
 end
-y = y(1,1:length(y)-1);
-end
+%y = y(1,1:length(y)-1);
 
-% x(t+h) = x(t) + xpunkt(t)*h
-% x(t+h) = x(t) + A*x(t+h)*h+b*u*h
-% x(t+h) = inv(1-A*h) * (x(t) +b*u*h)
+end

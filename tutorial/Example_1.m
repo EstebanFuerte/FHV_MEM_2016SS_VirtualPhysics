@@ -1,5 +1,5 @@
 % Author: Barth Benjamin, Mathis René, Stefan Stark
-% Date: 20160430
+% Date: 20160502
 % FHV - MEM - SS2016
 % Tutorial Task 5.3 Something to Compare With or Self-Validation
 
@@ -37,22 +37,23 @@ for i=1:6
     %% -- Calculation and Plot of forward euler -------------------------------
     [yFE,t_vec] = FE(A,b,c,d,u,h(i),t_end,x0);
     [yBE,t_vec] = BE(A,b,c,d,u,h(i),t_end,x0);
-    %[yAB3,t_vec] = AB3(A,b,c,d,u,h(i),t_end,x0);
-    %[yRK4,t_vec] = RK4(A,b,c,d,u,h(i),t_end,x0);
-    %[yBDF3,t_vec] = BDF3(A,b,c,d,u,h(i),t_end,x0);
+    [yAB3,t_vecAB] = AB3(A,b,c,d,u,h(i),t_end,x0);
+    [yRK4,t_vec] = RK4(A,b,c,d,u,h(i),t_end,x0);
+    [yBDF3,t_vec] = BDF3(A,b,c,d,u,h(i),t_end,x0);
 
     plot(t_vec,yFE);
     plot(t_vec,yBE);
-    %plot(t_vec,yAB3(:,1:length(yAB3)-3));
-    %plot(t_vec,yRK4);
-   % plot(t_vec,yBDF3);hold off;
+    plot(t_vecAB,yAB3);
+    plot(t_vec,yRK4);
+    plot(t_vec,yBDF3);hold off;
+    
     titleString=sprintf('h= %d', h(i));
     title(titleString);
-    %legend('analitic','FE','BE','AB3','RK4','BDF3');
+    legend('analitic','FE','BE','AB3','RK4','BDF3');
     ylabel('state variable');
     xlabel('time in s');
+    
     % Scale plot
-    %{
     if (min(yFE) < 0 || min(yBE)<0 || min(yBE) < 0 || min(yAB3) < 0|| min(yRK4) < 0)
         ymin = -2;
     else 
@@ -65,6 +66,4 @@ for i=1:6
         ymax = 1;
     end 
     axis([0 t_end ymin ymax]);
-    %}
-
 end

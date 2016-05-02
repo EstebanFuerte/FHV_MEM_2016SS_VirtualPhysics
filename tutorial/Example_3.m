@@ -1,3 +1,10 @@
+% Author: Barth Benjamin, Mathis René, Stefan Stark
+% Date: 20160502
+% FHV - MEM - SS2016
+% Simulating a Mechatronic System
+
+clear all; clc; close all;
+
 %inputs
 u = 18;      % dc-motor armature-voltage
 
@@ -28,14 +35,14 @@ psi = 0.66; % [Vs]
 % x5 = Fk2
 % conflict appears at the I:m element thus no state variable is introduced
 
-Jtot = J2 + rˆ2*m;
+Jtot = J2 + r^2*m;
 a11 = -Ra/La;
 a12 = -psi/La;
 a21 = psi/J1;
 a22 = -(b1+b3)/J1;
 a23 = b1/J1;
 a32 = b1/Jtot;
-a33 = -(b1 + rˆ2*b2)/Jtot;
+a33 = -(b1 + r^2*b2)/Jtot;
 a34 = -1/Jtot;
 a35 = -r/Jtot;
 a43 = k1;
@@ -51,3 +58,29 @@ b = [1/La 0 0 0 0; 0 0 r/Jtot 0 0]';
 cT = [0 0 r 0 0;  1 0 0 0 0]; % output = x3 = w2
 
 d = zeros(2,2);
+
+%% -- Plot result ---------------------------------------------------------
+sys = ss(A,b,cT,d);
+eig(A)
+t = 0:1e-3:1;
+u2 = [u;Fg];
+u1 = [u*ones(size(0:1e-3:1));Fg*ones(size(0:1e-3:1))];
+y=lsim(sys,u1,t);
+figure
+plot(t,y(:,2)); hold on;
+
+h = 0.3e-3;
+
+[yFE, t_FE] = FE(A,b,cT,d,u2,h,1,0);
+[yBE, t_BE] = BE(A,b,cT,d,u2,h,1,0);
+[yAB3, t_AB] = AB3(A,b,cT,d,u2,h,1,0);
+[yRK4, t_RK] = RK4(A,b,cT,d,u2,h,1,0);
+[yBDF3, t_BDF] = BDF3(A,b,cT,d,u2,h,1,0);
+
+plot(t_FE,yFE(2,:))
+plot(t_BE,yBE(2,:))
+plot(t_AB,yAB3(2,:))
+plot(t_RK,yRK4(2,:))
+plot(t_BDF,yBDF3(2,:))
+
+legend('lsim','FE','BE','AB3','RK4','BDF3');

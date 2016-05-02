@@ -3,24 +3,29 @@ function [y,t_vec] = FE(A, b, c, d, u, h, t_end, x0 )
 %on the forward euler
 %   Detailed explanation goes here
 
+aSv = length(A);                  	% amount of state vatiables
+vectorLength = length(0:h:t_end);	% length of vecotr
+i = 1;                              % counting variable
 
-i = 1;
-x = [zeros(size(0:h:t_end));zeros(size(0:h:t_end))];
-u = 30*ones(size(0:h:t_end));
-x(:,i) = x0;
-y(i) = c*x(:,i)+d*u(:,i);
+x = zeros(aSv,vectorLength);        % fill a vector with zeros
+x(:,i) = x0;                        % replace first element of x vector
+
+y = zeros(size(c,1),vectorLength);  % fill a matix with zeros
 
 %Calculation of the forward euler like:02_BasicsAndEulerSolver.pdf:slide 32
 for t = 0:h:t_end
     %FE
-    dx_dt(:,i) = A*x(:,i)+b*u(:,i);
-    x(:,i+1) = x(:,i) + dx_dt(:,i).*h;
+    dx_dt(:,i) = A*x(:,i)+b*u;
+    x(:,i+1) = x(:,i) + dx_dt(:,i)*h;
+    
     % for plotting
     t_vec(i) = t;
-    y(i+1) = c*x(:,i+1)+d*u(:,i);
+    y(:,i)=c*x(:,i)+d*u;
     i = i+1;
+    
 end
-y = y(1,1:length(y)-1);
+%y = c*x+d*u;
+%y = y(1,1:length(y)-1);
 
 
 end
