@@ -55,32 +55,64 @@ a53 = k2*r;
       0 0 a53 0 0];
 
 b = [1/La 0 0 0 0; 0 0 r/Jtot 0 0]';
-cT = [0 0 r 0 0;  1 0 0 0 0]; % output = x3 = w2
+cT = [0 0 r 0 0;  0 0 1 0 0]; % output = x3 = w2
 
 d = zeros(2,2);
 
 %% -- Plot result ---------------------------------------------------------
+
+% Definition des Schrittweitenvektors
+h = [0.1e-3 0.5e-3 1.00e-3 1.5e-3 ];
+
 sys = ss(A,b,cT,d);
 eig(A)
-t = 0:1e-3:1;
+t_end = 10e-3;
+h_lsim = min(h);
+t = 0:h_lsim:t_end;
 u2 = [u;Fg];
-u1 = [u*ones(size(0:1e-3:1));Fg*ones(size(0:1e-3:1))];
+u1 = [u*ones(size(0:h_lsim:t_end));Fg*ones(size(0:h_lsim:t_end))];
 y=lsim(sys,u1,t);
+
 figure
-plot(t,y(:,2)); hold on;
+for i = 1:4
+    subplot(2,2,i);
+    plot(t,y(:,2)); hold on;
 
-h = 0.3e-3;
+    title(['h=',num2str(h(i)),'s']);
+    xlabel('Time in Seconds');
+    ylabel('angular velocity in rad/s');
 
-[yFE, t_FE] = FE(A,b,cT,d,u2,h,1,0);
-[yBE, t_BE] = BE(A,b,cT,d,u2,h,1,0);
-[yAB3, t_AB] = AB3(A,b,cT,d,u2,h,1,0);
-[yRK4, t_RK] = RK4(A,b,cT,d,u2,h,1,0);
-[yBDF3, t_BDF] = BDF3(A,b,cT,d,u2,h,1,0);
+    [yFE, t_FE] = FE(A,b,cT,d,u2,h(i),t_end,0);
+    [yBE, t_BE] = BE(A,b,cT,d,u2,h(i),t_end,0);
+    [yAB3, t_AB] = AB3(A,b,cT,d,u2,h(i),t_end,0);
+    [yRK4, t_RK] = RK4(A,b,cT,d,u2,h(i),t_end,0);
+    [yBDF3, t_BDF] = BDF3(A,b,cT,d,u2,h(i),t_end,0);
 
-plot(t_FE,yFE(2,:))
-plot(t_BE,yBE(2,:))
-plot(t_AB,yAB3(2,:))
-plot(t_RK,yRK4(2,:))
-plot(t_BDF,yBDF3(2,:))
+    plot(t_FE,yFE(2,:))
+    plot(t_BE,yBE(2,:))
+    plot(t_AB,yAB3(2,:))
+    plot(t_RK,yRK4(2,:))
+    plot(t_BDF,yBDF3(2,:))
+    
+    miny = min(y(:,2));     % find minimum y value of the lsim simulation
+    maxy = max(y(:,2));     % find maximum y value of the lsim simulation
+    
+    % Scale plot
+    if (min(yFE(2,:)) < miny || min(yBE(2,:))< miny || ...
+            min(yBDF3(2,:)) < miny || min(yAB3(2,:)) < miny ||...
+            min(yRK4(2,:)) < miny)
+        ymin = miny*1.1;
+    else 
+        ymin = miny;
+    end
 
-legend('lsim','FE','BE','AB3','RK4','BDF3');
+    if (max(yFE(2,:)) > maxy || max(yBE(2,:))> maxy || ...
+            max(yBDF3(2,:)) >  maxy || max(yAB3(2,:)) >  maxy ||...
+            max(yRK4(2,:)) > maxy)
+        ymax = maxy*1.1;
+    else 
+        ymax = maxy;
+    end
+    axis([0 t_end ymin ymax]);
+    legend('lsim','FE','BE','AB3','RK4','BDF3');
+end
