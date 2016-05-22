@@ -1,7 +1,7 @@
 % Author: Barth Benjamin, Mathis René, Stefan Stark
 % Date: 20160509
 % FHV - MEM - SS2016
-% Tutorial Task 5.3 Something to Compare With or Self-Validation
+% Tutorial -Example: A DC-Motor
 
 clc; clear all; close all;
 

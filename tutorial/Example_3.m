@@ -1,7 +1,7 @@
 % Author: Barth Benjamin, Mathis René, Stefan Stark
 % Date: 20160502
 % FHV - MEM - SS2016
-% Simulating a Mechatronic System
+% Example: Simulating a Mechatronic System
 
 clear all; clc; close all;
 
