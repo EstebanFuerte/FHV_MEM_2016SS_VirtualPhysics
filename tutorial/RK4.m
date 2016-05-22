@@ -1,3 +1,8 @@
+% FH Vorarlberg
+% University of Applied Siences
+% Course:   Numerische Simulation physikalischer Systeme
+% Authors:  Barth Benjamin, Mathis René, Stark Stefan
+
 function [y,t_vec] = RK4(A, b, c, d, u, h, t_end, x0)
 
 aSv = length(A);                  	% amount of state vatiables

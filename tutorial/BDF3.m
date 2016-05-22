@@ -1,3 +1,8 @@
+% FH Vorarlberg
+% University of Applied Siences
+% Course:   Numerische Simulation physikalischer Systeme
+% Authors:  Barth Benjamin, Mathis René, Stark Stefan
+
 function [y,t_vec] = BDF3(A, b, c, d, u, h, t_end, x0 )
 % BDF3 creates a Newton-Gregory-Polynomial
 % formulate it for x(t) at t_k+1
