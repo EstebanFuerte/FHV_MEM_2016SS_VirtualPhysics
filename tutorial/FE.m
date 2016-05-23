@@ -1,3 +1,8 @@
+% FH Vorarlberg
+% University of Applied Siences
+% Course:   Numerische Simulation physikalischer Systeme
+% Authors:  Barth Benjamin, Mathis René, Stark Stefan
+
 function [y,t_vec] = FE(A, b, c, d, u, h, t_end, x0 )
 %FORWARDEULER returns time vector (for plotting) and state variable based
 %on the forward euler

@@ -1,3 +1,8 @@
+% FH Vorarlberg
+% University of Applied Siences
+% Course:   Numerische Simulation physikalischer Systeme
+% Authors:  Barth Benjamin, Mathis René, Stark Stefan
+
 function [ y, t_vec] = BE(A,b,c,d,u,h,t_end,x0 )
 %BACKWARDEULER Summary of this function goes here
 %   Detailed explanation goes here
